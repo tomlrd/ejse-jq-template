@@ -1,0 +1,60 @@
+<div id="createTodo">
+    <input type="text" id="title-todo">
+    <input type="text" id="title-content">
+    <button id="addTodo">add Todo</button>
+</div>
+<div id="todolist">
+
+</div>
+<script>
+    let removeTodoByTitle;
+    window.addEventListener("DOMContentLoaded", async () => {
+        //////////////////////// GET ////////////////////////
+        let todolist = []
+        if (localStorage.getItem('todoList') !== null) {
+            todolist = JSON.parse(localStorage.getItem('todoList'))
+        }
+        render(todolist)
+        setTimeout(() => {
+            api.send("loading", false)
+        }, 2000);
+        api.receive("return:todoList", async (arg) => {
+            console.log(arg[0]);
+            render(JSON.parse(arg[0]))
+        })
+        //////////////////////// SET ////////////////////////
+        $("#addTodo").click(function () {
+            let title = $('#title-todo').val()
+            let content = $('#title-content').val()
+            todolist.push({
+                title: title,
+                content: content
+            })
+            fetch("todoList", JSON.stringify(todolist), true)
+        });
+
+        removeTodoByTitle = function removeTodoByTitle(title) {
+            let foundByTitle = todolist.find(function (todo) {
+                return todo.title === title
+            });
+            if (foundByTitle !== undefined) {
+                todolist.splice(todolist.indexOf(foundByTitle), 1);
+                fetch("todoList", JSON.stringify(todolist), true)
+            }
+        }
+
+        function render(newlist) {
+            $('#todolist').html("")
+            newlist.forEach(todo => {
+                $('#todolist').append(`
+                <div class="todo">
+                    <div>title: ${todo.title}</div>
+                    <div>content: ${todo.content}</div>
+                    <button class="rmTodo" onclick="removeTodoByTitle('${todo.title}')">del</button>
+                </div>
+                `)
+            });
+        }
+
+    })
+</script>

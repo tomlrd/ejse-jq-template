@@ -1,0 +1,24 @@
+<div id="TopBar">
+    <span>version : <%= APPDATAS.version %></span>
+    <span>username :
+        <input type="text" data-username placeholder="<%= APPDATAS.user.name %>">
+    </span>
+</div>
+
+<script>
+    window.addEventListener("DOMContentLoaded", async () => {
+        ////////////////// GET /////////////////////
+        let ls_username = localStorage.getItem('username')
+        if (ls_username != null) {
+            fetch("username", ls_username, false)
+        }
+
+        ////////////////// SET /////////////////////
+        $("[data-username]").change(function () {
+            fetch("username", $(this).val(), true)
+        });
+        api.receive("return:username", async (arg) => {
+            $("[data-username]").attr("placeholder", arg[0])
+        })
+    })
+</script>
