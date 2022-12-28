@@ -9,7 +9,14 @@ ipcRenderer.send('loading', true)
 window.addEventListener("DOMContentLoaded", () => {
   contextBridge.exposeInMainWorld("api", {
     URIdatas: async () => {
-      return URIdatas
+      let checkDatas = JSON.parse(URIdatas)
+      for (const [key, value] of Object.entries(checkDatas)) {
+        if (localStorage.getItem(key) !== null) {
+          console.log(`URIdatas.${key} found a save in localstorage`);
+          checkDatas[key] = JSON.parse(localStorage.getItem(key))
+        }
+      }
+      return checkDatas
     },
     route: async () => {
       return route

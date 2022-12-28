@@ -10,18 +10,13 @@
     let removeTodoByTitle;
     window.addEventListener("DOMContentLoaded", async () => {
         //////////////////////// GET ////////////////////////
-        let todolist = []
-        if (localStorage.getItem('todoList') !== null) {
-            todolist = JSON.parse(localStorage.getItem('todoList'))
-        }
+        let todolist = URIdatas.todoList
         render(todolist)
-        setTimeout(() => {
-            api.send("loading", false)
-        }, 2000);
+
         api.receive("return:todoList", async (arg) => {
-            console.log(arg[0]);
-            render(JSON.parse(arg[0]))
+            render(arg[0])
         })
+
         //////////////////////// SET ////////////////////////
         $("#addTodo").click(function () {
             let title = $('#title-todo').val()
@@ -30,7 +25,7 @@
                 title: title,
                 content: content
             })
-            fetch("todoList", JSON.stringify(todolist), true)
+            fetch("todoList", todolist, true)
         });
 
         removeTodoByTitle = function removeTodoByTitle(title) {
@@ -39,7 +34,7 @@
             });
             if (foundByTitle !== undefined) {
                 todolist.splice(todolist.indexOf(foundByTitle), 1);
-                fetch("todoList", JSON.stringify(todolist), true)
+                fetch("todoList", todolist, true)
             }
         }
 

@@ -56,9 +56,6 @@ ipcMain.on('route', async (e, nextRoute) => {
 ////////// UPDATE APPDATAS ////////////
 ipcMain.on('fetch', async (e, [key, val]) => {
   APPDATAS[`${key}`] = val
-  ejse.data({
-    APPDATAS
-  })
   e.reply(`return:${key}`, val)
 })
 
