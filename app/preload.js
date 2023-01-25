@@ -1,25 +1,18 @@
 const { ipcRenderer, contextBridge } = require('electron');
+const todolistCTX = require('./contexts/todolist')
+////////////////////////////////////////////////
 const params = new URLSearchParams(window.location.search)
-const URIdatas = params.get('URIdatas')
-const route = params.get('route')
+const APPDATAS = JSON.parse(params.get('APPDATAS'))
 ////////////////////////////////////////////////
 ipcRenderer.send('loading', true)
-
 ////////////////////////////////////////////////
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async() => {
   contextBridge.exposeInMainWorld("api", {
-    URIdatas: async () => {
-      let checkDatas = JSON.parse(URIdatas)
-      for (const [key, value] of Object.entries(checkDatas)) {
-        if (localStorage.getItem(key) !== null) {
-          console.log(`URIdatas.${key} found a save in localstorage`);
-          checkDatas[key] = JSON.parse(localStorage.getItem(key))
-        }
-      }
-      return checkDatas
+    ctx: async ()=> {
+      return {todolistCTX}
     },
-    route: async () => {
-      return route
+    appdatas: async () => {
+      return APPDATAS
     },
     send: (channel, data) => ipcRenderer.send(channel, data),
     receive: (channel, func) => ipcRenderer.on(

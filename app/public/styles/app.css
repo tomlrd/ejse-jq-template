@@ -11,13 +11,7 @@ body {
     font-family: monospace, sans-serif;
     margin: auto;
 }
-.todo{
-    display: flex;
-    color: rgb(91, 99, 105);
-    padding: 5px;
-    justify-content: space-between;
-    background-color: #cbc1f1;
-}
-.todo div{
 
+button{
+    cursor: pointer;
 }
