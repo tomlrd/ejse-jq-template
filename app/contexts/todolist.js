@@ -1,7 +1,7 @@
 const datas = {
     todos: []
 }
-datas.todos = JSON.parse(localStorage.getItem('todoList')) // initial state
+datas.todos = localStorage.getItem('todoList') ? datas.todos =JSON.parse(localStorage.getItem('todoList')) : [] // initial state
 
 const addTodo = (el) => {
     try {
